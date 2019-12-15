@@ -17,6 +17,7 @@ let yOffset;
 let xCenter = 210;
 let yCenter = 210;
 let characterOrientation = 0;
+const playerSize = 40;
 //#region Key Information
 let keyBindings=[ {
                     // Left Arrow key
@@ -79,7 +80,6 @@ let keyBindings=[ {
                     targetVariable: "respawnAction"
                   }
                 ]
-const playerSize = 40;
 
 document.addEventListener("keydown", event =>{
   changeKeyState(event, true);
@@ -123,7 +123,6 @@ function changeKeyState(keyEvent, newBoolean){
     }
   });
 }
-
 //#endregion
 window.WebSocket = window.WebSocket || window.MozWebSocket;
 

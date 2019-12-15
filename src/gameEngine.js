@@ -74,12 +74,13 @@ module.exports = class GameEngine{
           this.collisionEngine.addObject(entityToBeAdded);
           break;
         case "9":
-          entityToBeAdded = new Enemy(
+          entityToBeAdded = new Zombie(
             mapInformation[index][2] * gridSize,
             mapInformation[index][1] * gridSize,
             gridSize,
             this.collisionEngine,
-            this.gameEntities);
+            this.gameEntities,
+            1);
           this.collisionEngine.addObject(entityToBeAdded);
       }
       addedEntities++;

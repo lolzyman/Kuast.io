@@ -17,51 +17,64 @@ let yOffset;
 let xCenter = 210;
 let yCenter = 210;
 let characterOrientation = 0;
+//#region Key Information
 let keyBindings=[ {
+                    // Left Arrow key
                     keyCode: 37,
                     targetVariable: "leftAction"
                   },
                   {
+                    // Up Arrow key
                     keyCode: 38,
                     targetVariable: "upAction"
                   },
                   {
+                    // Right Arrow key
                     keyCode: 39,
                     targetVariable: "rightAction"
                   },
                   {
+                    // Down Arrow key
                     keyCode: 40,
                     targetVariable: "downAction"
                   },
                   {
+                    // A key
                     keyCode: 65,
                     targetVariable: "leftAction"
                   },
                   {
+                    // W key
                     keyCode: 87,
                     targetVariable: "upAction"
                   },
                   {
+                    // D key
                     keyCode: 68,
                     targetVariable: "rightAction"
                   },
                   {
+                    // S key
                     keyCode: 83,
                     targetVariable: "downAction"
                   },
                   {
+                    // Any Shift key
                     keyCode: 16,
                     targetVariable: "shiftAction"
                   },
                   {
+                    // Q key
                     keyCode: 81,
                     targetVariable: "shootAction"
                   },
                   {
+                    // E key
                     keyCode: 69,
                     targetVariable: "swingAction"
                   },
                   {
+                    // R key
                     keyCode: 82,
                     targetVariable: "respawnAction"
                   }
@@ -69,78 +82,49 @@ let keyBindings=[ {
 const playerSize = 40;
 
 document.addEventListener("keydown", event =>{
-  keyBindings.forEach(element => {
-    if(event.keyCode === element.keyCode){
-      switch(element.targetVariable){
-        case "leftAction":
-          leftAction = true;
-          break;
-        case "rightAction":
-          rightAction = true;
-          break;
-        case "shootAction":
-          shootAction = true;
-          break;
-        case "upAction":
-          upAction = true;
-          break;
-        case "downAction":
-          downAction = true;
-          break;
-        case "shiftAction":
-          shiftAction = true;
-          break;
-        case "shootAction":
-          shootAction = true;
-          break;
-        case "swingAction":
-          swingAction = true;
-          break;
-        case "respawnAction":
-          respawnAction = true;
-          break;
-        default:
-          break;
-      }
-    }
-  });
+  changeKeyState(event, true);
 });
 
 document.addEventListener("keyup", event =>{
+  changeKeyState(event, false);
+});
+
+function changeKeyState(keyEvent, newBoolean){
   keyBindings.forEach(element => {
-    if(event.keyCode === element.keyCode){
+    if(keyEvent.keyCode === element.keyCode){
       switch(element.targetVariable){
         case "leftAction":
-          leftAction = false;
-          break;
+          leftAction = newBoolean;
+          return;
         case "rightAction":
-          rightAction = false;
-          break;
+          rightAction = newBoolean;
+          return;
         case "upAction":
-          upAction = false;
-          break;
+          upAction = newBoolean;
+          return;
         case "downAction":
-          downAction = false;
-          break;
+          downAction = newBoolean;
+          return;
         case "shiftAction":
-          shiftAction = false;
-          break;
+          shiftAction = newBoolean;
+          return;
         case "shootAction":
-          shootAction = false;
-          break;
+          shootAction = newBoolean;
+          return;
         case "swingAction":
-          swingAction = false;
-          break;
+          swingAction = newBoolean;
+          return;
         case "respawnAction":
-          respawnAction = false;
-          break;
+          respawnAction = newBoolean;
+          return;
         default:
-          break;
+          return;
       }
     }
   });
-});
+}
 
+//#endregion
 window.WebSocket = window.WebSocket || window.MozWebSocket;
 
 if (!window.WebSocket) {

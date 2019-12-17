@@ -1,0 +1,25 @@
+0-Generic Wall
+1-Safe Trap Floor
+2-Bad Trap Floor
+3-Pressure Plate 1
+4-Pressure Door 1
+5-Grave Stone
+6-Small Slime
+7-Large Slime
+8-Skeleton
+9-Zombie
+10-Pressure Plate 2
+11-Pressure Door 2
+12-Bat
+13-Boss Finish Wall
+14-Large Zombie (Boss)
+15-Level End
+16-Boss Intro Wall
+17-Spacing Square (Not Used)
+18-Mimic Chest
+19-Level 1 Chest
+20-Level 2 Chest
+21-Level 3 Chest
+22-Level 4 Chest
+23-Level 5 Chest
+24-Boss Inro Triggers

@@ -42,6 +42,10 @@ module.exports = class Player extends gameEntity {
     this.swingArcAngle = 60/180*Math.PI;
     this.currentSwordAngle = this.swingArcAngle/-2;
     //#endregion
+    //#region Shooting Variables
+    this.shootCooldown = 100;
+    this.currentShotCooldown = 0;
+    //#endregion
     this.orientationAngle = 0;
     this.uniquePlayerID;
     this.toolbelt=[];
@@ -180,8 +184,9 @@ module.exports = class Player extends gameEntity {
     var projectileX = 0;
     var projectileY = 0;
     var projectileSize = 10;
-    var projectileDX = 0;
-    var projectileDY = 0;
+    var projectileSpeed = 2;
+    var projectileDX = Math.sin(this.orientationAngle) * projectileSpeed;
+    var projectileDY = Math.cos(this.orientationAngle) * projectileSpeed;
     var dummyProjectile = new Projectile(
       projectileX,
       projectileY,

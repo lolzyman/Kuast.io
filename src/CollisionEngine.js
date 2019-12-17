@@ -3,6 +3,7 @@ const Player = require("./GameEntities/PlayerCharacter.js");
 const Wall = require("./GameEntities/Wall.js");
 const Enemy = require("./GameEntities/Enemy.js");
 const Projectile = require("./GameEntities/Projectile.js");
+const Floor = require("./GameEntities/FloorTile.js")
 
 const quadrentSize = 10;
 const gridSize = 40;
@@ -13,6 +14,7 @@ module.exports = class CollisionEngine {
     this.collsionObjects = [];
     this.connectedPlayers = [];
     this.quadrents = [];
+    this.spawnLocations = [];
     //Creates the Quadrents
     for(var x = 0; x < Math.ceil(xSize / quadrentSize / gridSize); x++){
       var quadrentRows = [];
@@ -179,8 +181,8 @@ module.exports = class CollisionEngine {
     return false;
   }
   resetPlayerToSpawn(player){
-    player.location.x = 7 * gridSize;
-    player.location.y = 37 * gridSize;
+    player.location.x = this.spawnLocations[0].location.x;
+    player.location.y = this.spawnLocations[0].location.y;
     player.quadrent.removeEntity(player);
     this.assignObjectToQuadrent(player);
   }
@@ -202,6 +204,7 @@ class collisionQuadrentContainer{
     this.containedPlayers = [];
     this.containedEnemies = [];
     this.containedProjectiles = [];
+    this.containedFloor = [];
     this.corner1 = corner1;
     this.corner2 = corner2;
     this.parentCollisionEngine = parentCollisionEngine;
@@ -622,6 +625,11 @@ class collisionQuadrentContainer{
     }
     if(EntityToAdd instanceof Wall){
       this.containedWalls.push(EntityToAdd);
+      return;
+    }
+    if(EntityToAdd instanceof Floor){
+      console.log("I added a floor Tiles");
+      this.containedFloor.push(EntityToAdd);
       return;
     }
     console.log("New Type of entity");

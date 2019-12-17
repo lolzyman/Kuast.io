@@ -3,6 +3,7 @@ const Player = require("./GameEntities/PlayerCharacter.js");
 const Wall = require("./GameEntities/Wall.js");
 const Enemy = require("./GameEntities/Enemy.js");
 const Zombie = require("./GameEntities/Enemies/Zombie.js");
+const Floor = require("./GameEntities/FloorTile.js");
 const fs = require('fs');
 const gridSize = 40;
 module.exports = class GameEngine{
@@ -13,7 +14,10 @@ module.exports = class GameEngine{
     this.walls = [];
     this.collisionEngine = new CollisionEngine(120*gridSize, 120*gridSize);
     this.gameEntities = [];
-    this.generateMap();
+    this.spawnLocations = [];
+    this.collisionEngine.spawnLocations = this.spawnLocations;
+    //this.generateMap();
+    this.generateLevel001();
   }
   gameLoop(){
     this.players.forEach(element => {
@@ -21,15 +25,15 @@ module.exports = class GameEngine{
     });
   }
   addPlayer(){
+    var targetSpawnTile = this.spawnLocations[0];
     var newPlayer = new Player(
-      39*gridSize,
-      7*gridSize,
+      targetSpawnTile.location.x,
+      targetSpawnTile.location.y,
       gridSize,
       this.collisionEngine,
       this.gameEntities
     );
     newPlayer.uniquePlayerID = this.uniquePlayerID;
-    console.log(this.uniquePlayerID);
     this.players.push(newPlayer);
     this.uniquePlayerID++;
     this.collisionEngine.addObject(newPlayer)
@@ -137,6 +141,16 @@ module.exports = class GameEngine{
           this.walls.push(entityToBeAdded);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
+        case "25":
+          entityToBeAdded = new Floor(
+            mapInformation[index][2] * gridSize,
+            mapInformation[index][1] * gridSize,
+            gridSize,
+            this.collisionEngine,
+            this.gameEntities);
+          this.collisionEngine.addObject(entityToBeAdded);
+          this.spawnLocations.push(entityToBeAdded);
+          break;
         case "9":
           entityToBeAdded = new Enemy(
             mapInformation[index][2] * gridSize,
@@ -145,6 +159,7 @@ module.exports = class GameEngine{
             this.collisionEngine,
             this.gameEntities);
           this.collisionEngine.addObject(entityToBeAdded);
+          break;
       }
       addedEntities++;
     }

@@ -23,3 +23,4 @@
 22-Level 4 Chest
 23-Level 5 Chest
 24-Boss Inro Triggers
+25-Player Spawn

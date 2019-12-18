@@ -23,5 +23,5 @@
 		{ "ext": ".conf.php", "level": 1 },
 		{ "ext": ".php", "level": 2 }
   ],
-  "autofold.unfold": true
+  "autofold.unfold": false
 }

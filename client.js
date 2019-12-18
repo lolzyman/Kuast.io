@@ -130,11 +130,14 @@ if (!window.WebSocket) {
   //If the browser doesn't support WebSockets
 }  
 
-// open connection
 var targetGameServer;
 //targetGameServer = 'ws://24.13.240.19:1337'; // Configuration for running the server at home
 targetGameServer = 'ws://localhost:1337'; // Configuration for running development on the laptop
 
+// Server that is used to determine things like login information, character class selection and other things that don't need a deticated websocket
+var targetInfoServer;
+
+// open connection
 var connection = new WebSocket(targetGameServer);
 
 //Connection Initialization

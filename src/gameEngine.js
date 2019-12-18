@@ -27,9 +27,9 @@ module.exports = class GameEngine{
   addPlayer(){
     var targetSpawnTile = this.spawnLocations[0];
     var newPlayer = new Player(
-      targetSpawnTile.location.x,
-      targetSpawnTile.location.y,
-      gridSize,
+      targetSpawnTile.location.x+1,
+      targetSpawnTile.location.y+1,
+      gridSize-2,
       this.collisionEngine
     );
     newPlayer.uniquePlayerID = this.uniquePlayerID;

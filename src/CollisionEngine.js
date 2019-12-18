@@ -631,7 +631,6 @@ class collisionQuadrentContainer{
       return;
     }
     if(EntityToAdd instanceof Floor){
-      console.log("I added a floor Tiles");
       this.containedFloor.push(EntityToAdd);
       return;
     }

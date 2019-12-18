@@ -5,15 +5,13 @@ module.exports =  class Projectile extends gameEntity {
     xPosition,
     yPosition,
     size,
-    parentCollisionEngine,
-    objectsToDrawArray
+    parentCollisionEngine
   ) {
     super(
       xPosition,
       yPosition,
       size,
-      parentCollisionEngine,
-      objectsToDrawArray
+      parentCollisionEngine
     );
     this.damage = 20;
     this.baseColor = "#888";

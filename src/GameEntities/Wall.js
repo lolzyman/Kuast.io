@@ -6,15 +6,13 @@ module.exports =  class Wall extends gameEntity {
     xPosition,
     yPosition,
     size,
-    parentCollisionEngine,
-    objectsToDrawArray
+    parentCollisionEngine
   ) {
     super(
       xPosition,
       yPosition,
       size,
-      parentCollisionEngine,
-      objectsToDrawArray
+      parentCollisionEngine
     );
     this.falseWall = false;
     this.durability = 100;

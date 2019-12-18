@@ -30,8 +30,7 @@ module.exports = class GameEngine{
       targetSpawnTile.location.x,
       targetSpawnTile.location.y,
       gridSize,
-      this.collisionEngine,
-      this.gameEntities
+      this.collisionEngine
     );
     newPlayer.uniquePlayerID = this.uniquePlayerID;
     this.players.push(newPlayer);
@@ -72,8 +71,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize,
             mapInformation[index][1] * gridSize,
             gridSize,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.walls.push(entityToBeAdded);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
@@ -83,7 +81,6 @@ module.exports = class GameEngine{
             mapInformation[index][1] * gridSize,
             gridSize,
             this.collisionEngine,
-            this.gameEntities,
             1);
           this.collisionEngine.addObject(entityToBeAdded);
       }
@@ -135,8 +132,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize,
             mapInformation[index][1] * gridSize,
             gridSize,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.walls.push(entityToBeAdded);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
@@ -146,8 +142,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
         }
@@ -156,8 +151,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
         }
@@ -166,8 +160,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
         }
@@ -176,8 +169,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
         }
@@ -186,8 +178,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
         }
@@ -196,8 +187,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
         }
@@ -206,8 +196,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
         }
@@ -216,8 +205,7 @@ module.exports = class GameEngine{
             mapInformation[index][2] * gridSize,
             mapInformation[index][1] * gridSize,
             gridSize,
-            this.collisionEngine,
-            this.gameEntities);
+            this.collisionEngine);
           this.collisionEngine.addObject(entityToBeAdded);
           this.spawnLocations.push(entityToBeAdded);
           break;

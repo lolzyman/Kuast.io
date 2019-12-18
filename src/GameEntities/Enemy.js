@@ -6,15 +6,13 @@ module.exports = class Enemy extends gameEntity {
     xPosition,
     yPosition,
     size,
-    parentCollisionEngine,
-    objectsToDrawArray
+    parentCollisionEngine
   ) {
     super(
       xPosition,
       yPosition,
       size,
-      parentCollisionEngine,
-      objectsToDrawArray
+      parentCollisionEngine
     );
     this.health = 50;
     this.baseColor = "#0f0";

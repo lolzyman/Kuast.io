@@ -7,15 +7,13 @@ module.exports = class Player extends gameEntity {
     xPosition,
     yPosition,
     size,
-    parentCollisionEngine,
-    objectsToDrawArray
+    parentCollisionEngine
   ) {
     super(
       xPosition,
       yPosition,
       size,
-      parentCollisionEngine,
-      objectsToDrawArray
+      parentCollisionEngine
     );
     
     //#region Character Movements
@@ -103,7 +101,7 @@ module.exports = class Player extends gameEntity {
       this.quadrent.respawn(this);
     }
     //#endregion
-    //#region 
+    //#region KnockBack Handling
     if(this.knockbackDuration > 0){
       this.knockbackDuration--;
       this.movementOption2(this.knockbackAngle, this.knockbackForce);
@@ -191,8 +189,7 @@ module.exports = class Player extends gameEntity {
       projectileX,
       projectileY,
       projectileSize,
-      this.collisionEngine,
-      this.drawnArray
+      this.collisionEngine
     );
     if (!this.collisionEngine.doesMovementCauseCollision(dummyProjectile)) {
       dummyProjectile.velocity.x = projectileDX;

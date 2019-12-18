@@ -3,14 +3,12 @@ module.exports = class gameEntity {
     xPosition,
     yPosition,
     size,
-    parentCollisionEngine,
-    objectsToDrawArray
+    parentCollisionEngine
   ) {
     //General Stats
     this.health = 100;
     this.maxHealth = 100;
     this.quadrent;
-    this.drawnArray = objectsToDrawArray;
     this.collisionEngine = parentCollisionEngine;
     this.location = {
       x: xPosition,

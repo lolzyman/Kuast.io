@@ -5,16 +5,13 @@ module.exports = class FloorTile extends gameEntity {
     xPosition,
     yPosition,
     size,
-    parentCollisionEngine,
-    objectsToDrawArray
+    parentCollisionEngine
     ){
       super(
         xPosition,
         yPosition,
         size,
-        parentCollisionEngine,
-        objectsToDrawArray
+        parentCollisionEngine
       );
-      console.log("I got created!");
     }
 }

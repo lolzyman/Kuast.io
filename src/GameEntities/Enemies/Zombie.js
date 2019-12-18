@@ -6,10 +6,9 @@ module.exports = class Zombie extends Enemy{
     yPosition,
     size,
     parentCollisionEngine,
-    objectsToDrawArray,
     zombieLevel
     ){
-    super(xPosition, yPosition, size, parentCollisionEngine, objectsToDrawArray);
+    super(xPosition, yPosition, size, parentCollisionEngine);
     switch(zombieLevel){
       default:
         this.health = 50;

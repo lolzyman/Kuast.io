@@ -163,7 +163,8 @@ connection.onmessage = function (message) {
 
   xOffset = json.player.x + playerSize / 2;
   yOffset = json.player.y + playerSize / 2;
-  ctx.clearRect(0,0,420,420);
+  ctx.fillStyle = "black";
+  ctx.fillRect(0,0,420,420);
   //console.log(json);
   //#region Draw Floors
   json.floors.forEach(element=>{
@@ -194,7 +195,7 @@ connection.onmessage = function (message) {
   //#region Draw Walls
   json.walls.forEach(element =>{
     ctx.beginPath();
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "grey";
     ctx.rect(element.x  - xOffset + xCenter, element.y  - yOffset + yCenter, playerSize, playerSize);
     ctx.fill();
     ctx.closePath();

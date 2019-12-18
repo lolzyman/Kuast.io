@@ -76,6 +76,7 @@ module.exports = class CollisionEngine {
             x: item.location.x,
             y: item.location.y,
             orientation: item.orientationAngle,
+            health: item.getHealthPercentage(),
             weapon: {type: "sword", swingAngle: item.currentSwordAngle + item.orientationAngle}
           })
         }else{
@@ -83,6 +84,8 @@ module.exports = class CollisionEngine {
             x: item.location.x,
             y: item.location.y,
             orientation: item.orientationAngle,
+            health: item.getHealthPercentage(),
+            
             weapon: {type:"sword", swingAngle: item.currentSwordAngle + item.orientationAngle}
           }
         }
@@ -91,7 +94,7 @@ module.exports = class CollisionEngine {
         walls.push({x:element.location.x,y:element.location.y});
       });
       enemiesObjectArray.forEach(element =>{
-        enemies.push({x:element.location.x,y:element.location.y});
+        enemies.push({x:element.location.x,y:element.location.y,health:element.getHealthPercentage()});
       });
     }else{
     }

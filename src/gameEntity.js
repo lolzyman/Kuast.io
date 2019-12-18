@@ -8,6 +8,7 @@ module.exports = class gameEntity {
   ) {
     //General Stats
     this.health = 100;
+    this.maxHealth = 100;
     this.quadrent;
     this.drawnArray = objectsToDrawArray;
     this.collisionEngine = parentCollisionEngine;
@@ -36,7 +37,9 @@ module.exports = class gameEntity {
   setQuadrent(newQuadrent){
     this.quadrent = newQuadrent;
   }
-
+  getHealthPercentage(){
+    return(this.health * 100)/this.maxHealth;
+  }
   destroy() {
     this.quadrent.removeEntity(this);
   }

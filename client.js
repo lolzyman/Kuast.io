@@ -200,6 +200,18 @@ connection.onmessage = function (message) {
   //#region Draw Sword
   drawSword(xCenter, yCenter, (1 + 0.5) * playerSize, json.player.weapon.swingAngle);
   //#endregion
+  //#region Draw Health Bar
+  ctx.beginPath();
+  ctx.fillStyle = "red";
+  ctx.strokeStyle = "black";
+  ctx.rect(xCenter - 20, yCenter - 32, 40, 7);
+  ctx.stroke();
+  ctx.closePath();
+  ctx.beginPath();
+  ctx.rect(xCenter - 20, yCenter - 32, 40 * json.player.health/100, 7);
+  ctx.fill();
+  ctx.closePath();
+  //#endregion
   //#endregion
   //#region Draw Walls
   json.walls.forEach(element =>{
@@ -212,11 +224,25 @@ connection.onmessage = function (message) {
   //#endregion
   //#region Draw Enemies
   json.enemies.forEach(element =>{
+    var elementCenterx = element.x - xOffset + xCenter + playerSize / 2;
+    var elementCentery = element.y - yOffset + xCenter + playerSize / 2;
     ctx.beginPath();
     ctx.fillStyle = "blue";
-    ctx.arc(element.x - xOffset + xCenter + playerSize / 2, element.y - yOffset + yCenter + playerSize / 2, playerSize /2, 0, Math.PI * 2);
+    ctx.arc(elementCenterx, elementCentery, playerSize /2, 0, Math.PI * 2);
     ctx.fill();
     ctx.closePath();
+    //#region Draw Health Bar
+    ctx.beginPath();
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "black";
+    ctx.rect(elementCenterx - 20, elementCentery - 32, 40, 7);
+    ctx.stroke();
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.rect(elementCenterx - 20, elementCentery - 32, 40 * element.health/100, 7);
+    ctx.fill();
+    ctx.closePath();
+  //#endregion
   });
   //#endregion
   //#region Send Response

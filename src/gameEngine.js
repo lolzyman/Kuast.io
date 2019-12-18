@@ -128,10 +128,9 @@ module.exports = class GameEngine{
     var mapInformation = [];
     var mapInformation = this.importLevel001();
     var entityToBeAdded;
-    var addedEntities = 0;
     for(var index = 0; index < mapInformation.length; index++){
       switch(mapInformation[index][0]){
-        case "0":
+        case "0":{//Wall
           entityToBeAdded = new Wall(
             mapInformation[index][2] * gridSize,
             mapInformation[index][1] * gridSize,
@@ -141,7 +140,78 @@ module.exports = class GameEngine{
           this.walls.push(entityToBeAdded);
           this.collisionEngine.addObject(entityToBeAdded);
           break;
-        case "25":
+        }
+        case "6":{//Small Slime
+          entityToBeAdded = new Enemy(
+            mapInformation[index][2] * gridSize+1,
+            mapInformation[index][1] * gridSize+1,
+            gridSize-2,
+            this.collisionEngine,
+            this.gameEntities);
+          this.collisionEngine.addObject(entityToBeAdded);
+          break;
+        }
+        case "7":{//Large Slime
+          entityToBeAdded = new Enemy(
+            mapInformation[index][2] * gridSize+1,
+            mapInformation[index][1] * gridSize+1,
+            gridSize-2,
+            this.collisionEngine,
+            this.gameEntities);
+          this.collisionEngine.addObject(entityToBeAdded);
+          break;
+        }
+        case "8":{//Skeleton
+          entityToBeAdded = new Enemy(
+            mapInformation[index][2] * gridSize+1,
+            mapInformation[index][1] * gridSize+1,
+            gridSize-2,
+            this.collisionEngine,
+            this.gameEntities);
+          this.collisionEngine.addObject(entityToBeAdded);
+          break;
+        }
+        case "9":{//Zombie
+          entityToBeAdded = new Enemy(
+            mapInformation[index][2] * gridSize+1,
+            mapInformation[index][1] * gridSize+1,
+            gridSize-2,
+            this.collisionEngine,
+            this.gameEntities);
+          this.collisionEngine.addObject(entityToBeAdded);
+          break;
+        }
+        case "12":{//Bat
+          entityToBeAdded = new Enemy(
+            mapInformation[index][2] * gridSize+1,
+            mapInformation[index][1] * gridSize+1,
+            gridSize-2,
+            this.collisionEngine,
+            this.gameEntities);
+          this.collisionEngine.addObject(entityToBeAdded);
+          break;
+        }
+        case "14":{//Boss Zombie
+          entityToBeAdded = new Enemy(
+            mapInformation[index][2] * gridSize+1,
+            mapInformation[index][1] * gridSize+1,
+            gridSize-2,
+            this.collisionEngine,
+            this.gameEntities);
+          this.collisionEngine.addObject(entityToBeAdded);
+          break;
+        }
+        case "18":{//Mimic
+          entityToBeAdded = new Enemy(
+            mapInformation[index][2] * gridSize+1,
+            mapInformation[index][1] * gridSize+1,
+            gridSize-2,
+            this.collisionEngine,
+            this.gameEntities);
+          this.collisionEngine.addObject(entityToBeAdded);
+          break;
+        }
+        case "25":{//Spawn Tile
           entityToBeAdded = new Floor(
             mapInformation[index][2] * gridSize,
             mapInformation[index][1] * gridSize,
@@ -151,17 +221,8 @@ module.exports = class GameEngine{
           this.collisionEngine.addObject(entityToBeAdded);
           this.spawnLocations.push(entityToBeAdded);
           break;
-        case "9":
-          entityToBeAdded = new Enemy(
-            mapInformation[index][2] * gridSize,
-            mapInformation[index][1] * gridSize,
-            gridSize,
-            this.collisionEngine,
-            this.gameEntities);
-          this.collisionEngine.addObject(entityToBeAdded);
-          break;
+        }
       }
-      addedEntities++;
     }
   }
   //#endregion

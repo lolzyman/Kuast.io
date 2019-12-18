@@ -210,6 +210,15 @@ module.exports = class GameEngine{
           this.spawnLocations.push(entityToBeAdded);
           break;
         }
+        case "26":{//Generic Floor Tile
+          entityToBeAdded = new Floor(
+            mapInformation[index][2] * gridSize,
+            mapInformation[index][1] * gridSize,
+            gridSize,
+            this.collisionEngine);
+          this.collisionEngine.addObject(entityToBeAdded);
+          break;
+        }
       }
     }
   }

@@ -9,6 +9,7 @@ module.exports = class gameEntity {
     this.health = 100;
     this.maxHealth = 100;
     this.quadrent;
+    this.transparent = true;
     this.collisionEngine = parentCollisionEngine;
     this.location = {
       x: xPosition,

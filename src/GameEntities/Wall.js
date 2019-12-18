@@ -16,6 +16,7 @@ module.exports =  class Wall extends gameEntity {
     );
     this.falseWall = false;
     this.durability = 100;
+    this.transparent = false;
     this.industructable = false;
     this.baseColor = "#000";
     this.collisionStyle = "Rect";

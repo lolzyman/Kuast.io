@@ -164,8 +164,16 @@ connection.onmessage = function (message) {
   xOffset = json.player.x + playerSize / 2;
   yOffset = json.player.y + playerSize / 2;
   ctx.clearRect(0,0,420,420);
-  // NOTE: if you're not sure about the JSON structure check the server source code above first response from the server with user's color
   //console.log(json);
+  //#region Draw Floors
+  json.floors.forEach(element=>{
+    ctx.beginPath();
+    ctx.fillStyle = "brown";
+    ctx.rect(element.x  - xOffset + xCenter, element.y  - yOffset + yCenter, playerSize, playerSize);
+    ctx.fill();
+    ctx.closePath();
+  });
+  //#endregion
   //#region Draw Other Players
   json.otherPlayers.forEach(element => {
     ctx.beginPath();
@@ -182,39 +190,6 @@ connection.onmessage = function (message) {
     ctx.closePath();
     drawSword(element.x - xOffset + xCenter + playerSize / 2, element.y - yOffset + yCenter + playerSize / 2, (1 + 0.5) * playerSize, element.weapon.swingAngle);
   });
-  //#endregion
-  //#region Draw Current Player
-  //#region Draw Body
-  ctx.beginPath();
-  ctx.fillStyle = "green";
-  ctx.arc(xCenter, yCenter, playerSize /2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.closePath();
-  //#endregion
-  //#region Draw Nose
-  ctx.beginPath();
-  ctx.fillStyle = "yellow";
-  ctx.strokeStyle = "black";
-  ctx.arc(xCenter + Math.cos(json.player.orientation)*(playerSize / 2), yCenter + Math.sin(json.player.orientation)*(playerSize / 2), playerSize /6, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-  ctx.closePath();
-  //#endregion
-  //#region Draw Sword
-  drawSword(xCenter, yCenter, (1 + 0.5) * playerSize, json.player.weapon.swingAngle);
-  //#endregion
-  //#region Draw Health Bar
-  ctx.beginPath();
-  ctx.fillStyle = "red";
-  ctx.strokeStyle = "black";
-  ctx.rect(xCenter - 20, yCenter - 32, 40, 7);
-  ctx.stroke();
-  ctx.closePath();
-  ctx.beginPath();
-  ctx.rect(xCenter - 20, yCenter - 32, 40 * json.player.health/100, 7);
-  ctx.fill();
-  ctx.closePath();
-  //#endregion
   //#endregion
   //#region Draw Walls
   json.walls.forEach(element =>{
@@ -247,6 +222,39 @@ connection.onmessage = function (message) {
     ctx.closePath();
   //#endregion
   });
+  //#endregion
+   //#region Draw Current Player
+  //#region Draw Body
+  ctx.beginPath();
+  ctx.fillStyle = "green";
+  ctx.arc(xCenter, yCenter, playerSize /2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.closePath();
+  //#endregion
+  //#region Draw Nose
+  ctx.beginPath();
+  ctx.fillStyle = "yellow";
+  ctx.strokeStyle = "black";
+  ctx.arc(xCenter + Math.cos(json.player.orientation)*(playerSize / 2), yCenter + Math.sin(json.player.orientation)*(playerSize / 2), playerSize /6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.closePath();
+  //#endregion
+  //#region Draw Sword
+  drawSword(xCenter, yCenter, (1 + 0.5) * playerSize, json.player.weapon.swingAngle);
+  //#endregion
+  //#region Draw Health Bar
+  ctx.beginPath();
+  ctx.fillStyle = "red";
+  ctx.strokeStyle = "black";
+  ctx.rect(xCenter - 20, yCenter - 32, 40, 7);
+  ctx.stroke();
+  ctx.closePath();
+  ctx.beginPath();
+  ctx.rect(xCenter - 20, yCenter - 32, 40 * json.player.health/100, 7);
+  ctx.fill();
+  ctx.closePath();
+  //#endregion
   //#endregion
   //#region Send Response
   connection.send(JSON.stringify({ upAction: upAction,

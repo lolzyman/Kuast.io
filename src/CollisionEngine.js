@@ -56,9 +56,11 @@ module.exports = class CollisionEngine {
     var otherPlayers = [];
     var walls = [];
     var enemies = [];
+    var floors = [];
     var playersObjectArray = [];
     var wallsObjectArray = [];
     var enemiesObjectArray = [];
+    var floorObjectArray = [];
     for(var x = 0; x < this.quadrents.length; x++){
       for(var y = 0; y < this.quadrents.length; y++){
         if(this.quadrents[x][y].containsPlayerID(playerID)){
@@ -70,6 +72,7 @@ module.exports = class CollisionEngine {
       containingQuadrent.getReleventPlayers(playersObjectArray);
       containingQuadrent.getReleventWalls(wallsObjectArray);
       containingQuadrent.getReleventEnemies(enemiesObjectArray);
+      containingQuadrent.getReleventFloors(floorObjectArray);
       playersObjectArray.forEach(function(item, index, array){
         if(item.uniquePlayerID != playerID){
           otherPlayers.push({
@@ -96,11 +99,15 @@ module.exports = class CollisionEngine {
       enemiesObjectArray.forEach(element =>{
         enemies.push({x:element.location.x,y:element.location.y,health:element.getHealthPercentage()});
       });
+      floorObjectArray.forEach(element=>{
+        floors.push({x:element.location.x,y:element.location.y});
+      });
     }else{
     }
     playerViewObject.walls = walls;
     playerViewObject.otherPlayers = otherPlayers;
     playerViewObject.enemies = enemies;
+    playerViewObject.floors = floors;
     return playerViewObject;
   }
   addObject(object) {
@@ -547,6 +554,16 @@ class collisionQuadrentContainer{
     for(var index = 0; index < this.adjacentQuadrents.length; index++){
       for(var secondIndex = 0; secondIndex < this.adjacentQuadrents[index].containedEnemies.length; secondIndex++){
         arrayForEnemies.push(this.adjacentQuadrents[index].containedEnemies[secondIndex]);
+      }
+    }
+  }
+  getReleventFloors(arrayForFloors){
+    this.containedFloor.forEach(Element=>{
+      arrayForFloors.push(Element);
+    });
+    for(var index = 0; index < this.adjacentQuadrents.length; index++){
+      for(var secondIndex = 0; secondIndex < this.adjacentQuadrents[index].containedFloor.length; secondIndex++){
+        arrayForFloors.push(this.adjacentQuadrents[index].containedFloor[secondIndex]);
       }
     }
   }

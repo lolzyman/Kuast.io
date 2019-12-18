@@ -15,6 +15,7 @@ module.exports = class Enemy extends gameEntity {
       parentCollisionEngine
     );
     this.health = 50;
+    this.maxHealth = 50;
     this.baseColor = "#0f0";
     this.collisionStyle = "Circle";
     this.speed = 1;

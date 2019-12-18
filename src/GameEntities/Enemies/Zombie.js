@@ -11,9 +11,12 @@ module.exports = class Zombie extends Enemy{
     super(xPosition, yPosition, size, parentCollisionEngine);
     switch(zombieLevel){
       default:
-        this.health = 50;
+        this.health = 75;
+        this.maxHealth = 50;
         break;
     }
+    this.health = 10;
+    this.maxHealth = 75;
   }
   moveToPlayer() {
     var dx = this.targetPlayer.location.x + this.targetPlayer.size.x - this.location.x - this.size.x;

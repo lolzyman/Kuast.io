@@ -165,7 +165,7 @@ module.exports = class GameEngine{
           break;
         }
         case "9":{//Zombie
-          entityToBeAdded = new Enemy(
+          entityToBeAdded = new Zombie(
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,
@@ -174,7 +174,7 @@ module.exports = class GameEngine{
           break;
         }
         case "12":{//Bat
-          entityToBeAdded = new Enemy(
+          entityToBeAdded = new Zombie(
             mapInformation[index][2] * gridSize+1,
             mapInformation[index][1] * gridSize+1,
             gridSize-2,

@@ -80,6 +80,7 @@ module.exports = class CollisionEngine {
             y: item.location.y,
             orientation: item.orientationAngle,
             health: item.getHealthPercentage(),
+            transparent: item.transparent,
             weapon: {type: "sword", swingAngle: item.currentSwordAngle + item.orientationAngle}
           })
         }else{
@@ -88,19 +89,19 @@ module.exports = class CollisionEngine {
             y: item.location.y,
             orientation: item.orientationAngle,
             health: item.getHealthPercentage(),
-            
+            transparent: item.transparent,
             weapon: {type:"sword", swingAngle: item.currentSwordAngle + item.orientationAngle}
           }
         }
       });
       wallsObjectArray.forEach(element =>{
-        walls.push({x:element.location.x,y:element.location.y});
+        walls.push({x:element.location.x,y:element.location.y,transparent:element.transparent});
       });
       enemiesObjectArray.forEach(element =>{
-        enemies.push({x:element.location.x,y:element.location.y,health:element.getHealthPercentage()});
+        enemies.push({x:element.location.x,y:element.location.y,health:element.getHealthPercentage(),transparent:element.transparent});
       });
       floorObjectArray.forEach(element=>{
-        floors.push({x:element.location.x,y:element.location.y});
+        floors.push({x:element.location.x,y:element.location.y,transparent:element.transparent});
       });
     }else{
     }

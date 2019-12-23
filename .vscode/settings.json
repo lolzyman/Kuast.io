@@ -1,3 +1,14 @@
 {
-    "html.validate.scripts": true
+    "html.validate.scripts": true,
+    "autofold.default": 0,
+    "autofold.delay": 250,
+    "autofold.pack": false,
+    "autofold.types": [
+		{ "ext": ".js", "level": 1 },
+		{ "ext": ".c", "level": 1 },
+		{ "ext": ".cs", "level": 2 },
+		{ "ext": ".conf.php", "level": 1 },
+		{ "ext": ".php", "level": 2 }
+    ],
+    "autofold.unfold": false    
 }

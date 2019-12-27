@@ -415,7 +415,6 @@ function checkVisionWallCollision(targetWall, arrayOfWall, targetIndex){
       if(trueLineRectCollision(visionLineSegment, rectObject2) === true){
         cornersAreBlocked[i] = true;
       }else{
-        //drawParametricLine(visionLine, "red");
       }
     }
   }

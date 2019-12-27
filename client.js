@@ -288,10 +288,11 @@ connection.onmessage = function (message) {
 };
 function drawProjectile(projectile){
   var projectileLocation = covertWorldPointToScreenPoint(projectile);
-  var projectileCenter = {x:projectileLocation.x + projectile.size.x,y:projectileLocation.y + projectile.size.y};
+  var projectileCenter = {x:projectileLocation.x + projectile.size.x/2,y:projectileLocation.y + projectile.size.y/2};
   //console.log("Im drawing stones", projectileCenter, projectile.size);
   ctx.beginPath();
-  ctx.arc(projectileCenter.x,projectileCenter.y, projectile.size.x/2,0, Math.PI * 2);
+  console.log(projectile.size.x/2);
+  ctx.arc(projectileCenter.x ,projectileCenter.y, projectile.size.x/2,0, Math.PI * 2);
   ctx.fillStyle = "red";
   ctx.strokeStyle = "blue";
   ctx.closePath();

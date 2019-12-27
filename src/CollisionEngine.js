@@ -3,7 +3,8 @@ const Player = require("./GameEntities/PlayerCharacter.js");
 const Wall = require("./GameEntities/Wall.js");
 const Enemy = require("./GameEntities/Enemy.js");
 const Projectile = require("./GameEntities/Projectile.js");
-const Floor = require("./GameEntities/FloorTile.js")
+const Floor = require("./GameEntities/FloorTile.js");
+const Weapon = require("./Equippables/Weapon.js");
 
 const quadrentSize = 10;
 const gridSize = 40;
@@ -289,94 +290,161 @@ class collisionQuadrentContainer{
     return true;
   }
   doesThisBumpAWall(objectDoingTheBumping, ImActuallyMoving){
-    switch(objectDoingTheBumping.collisionStyle){
-      case "Circle":
-        for(var index = 0; index < this.containedWalls.length; index++){
-          if(this.testCollisionRectCircle(this.containedWalls[index], objectDoingTheBumping)){
-            if(ImActuallyMoving){
-              this.containedWalls[index].collidedWith(objectDoingTheBumping);
-            }
-            return true;
-          }
-        }
-        break;
-      case "Stick":
-        for(var index = 0; index < this.containedWalls.length; index++){
-          if(this.testCollisionLineRect(objectDoingTheBumping,this.containedWalls[index])){
-            if(ImActuallyMoving){
-              this.containedWalls[index].collidedWith(objectDoingTheBumping);
-            }
-            return true;
-          }
-        }
-        break;
+    if(objectDoingTheBumping instanceof Projectile){
+      if(this.testCollisionRectArrayCircle(this.containedWalls,objectDoingTheBumping,ImActuallyMoving)){
+        return true;
+      }else{
+        return false;
+      }
     }
+    if(objectDoingTheBumping instanceof Player){
+      if(this.testCollisionRectArrayCircle(this.containedWalls,objectDoingTheBumping,ImActuallyMoving)){
+        //You should test to see if the wall is a false wall;
+        return true;
+      }else{
+        return false;
+      }
+    }
+    if(objectDoingTheBumping instanceof Weapon){
+      if(this.testCollisionRectArrayLine(this.containedWalls, objectDoingTheBumping, ImActuallyMoving)){
+        return true;
+      }else{
+        return false;
+      }
+    }
+    if(objectDoingTheBumping instanceof Enemy){
+      if(this.testCollisionRectArrayCircle(this.containedWalls,objectDoingTheBumping,ImActuallyMoving)){
+        return true;
+      }else{
+        return false;
+      }
+    }
+    console.log("There was a collision test condition that wasn't found");
     return false;
   }
   doesThisHitAPlayer(objectDoingTheBumping, ImActuallyMoving){
-    switch(objectDoingTheBumping.collisionStyle){
-      case "Circle":
-        for(var index = 0; index < this.containedPlayers.length; index++){
-          if(objectDoingTheBumping != this.containedPlayers[index]){
-            if(this.testCollisionCircleCircle(this.containedPlayers[index], objectDoingTheBumping)){
-              var otherObject = this.containedPlayers[index];
-              if(ImActuallyMoving){
-                if(objectDoingTheBumping instanceof Player){
-
-                }else if(objectDoingTheBumping instanceof Enemy){
-                  otherObject.attackedBy("blunt", 10, this.angleBetweenPoints(otherObject.getCenter(), objectDoingTheBumping.getCenter()));
-                }
-              }
-              return true;
-            }
-          }
-        }
-        break;
-      case "Stick":
-        for(var index = 0; index < this.containedPlayers.length; index++){
-          if(this.testCollisionLineCircle(objectDoingTheBumping, this.containedPlayers[index])){
-            if(ImActuallyMoving){
-              this.containedPlayers[index].collidedWith(objectDoingTheBumping);
-            }
-            return true;
-          }
-        }
-        break;
+    var otherObject;
+    if(objectDoingTheBumping instanceof Projectile){
+      if(otherObject = this.testCollisionCircleArrayCircle(this.containedPlayers,objectDoingTheBumping,ImActuallyMoving)){
+        //Handle being shot by projectiles
+        return true;
+      }else{
+        return false;
+      }
     }
+    if(objectDoingTheBumping instanceof Player){
+      if(otherObject = this.testCollisionCircleArrayCircle(this.containedPlayers,objectDoingTheBumping,ImActuallyMoving)){
+        //Players bumping into each other
+        console.log("Here I think there is self collision");
+        return true;
+      }else{
+        return false;
+      }
+    }
+    if(objectDoingTheBumping instanceof Weapon){
+      if(otherObject = this.testCollisionCircleArrayLine(this.containedPlayers, objectDoingTheBumping, ImActuallyMoving)){
+        //Handles Players hitting each other
+        return true;
+      }else{
+        return false;
+      }
+    }
+    if(objectDoingTheBumping instanceof Enemy){
+      if(otherObject = this.testCollisionCircleArrayCircle(this.containedPlayers,objectDoingTheBumping,ImActuallyMoving)){
+        //Handles Enemies hitting players
+        otherObject.attackedBy("blunt", 10, this.angleBetweenPoints(otherObject.getCenter(), objectDoingTheBumping.getCenter()));
+        return true;
+      }else{
+        return false;
+      }
+    }
+    console.log("There was a collision test condition that wasn't found");
     return false;
   }
   doesThisHitAnEnemy(objectDoingTheBumping, ImActuallyMoving){
-    switch(objectDoingTheBumping.collisionStyle){
-      case "Circle":
-        for(var index = 0; index < this.containedEnemies.length; index++){
-          var otherObject = this.containedEnemies[index]
-          if(objectDoingTheBumping != otherObject){
-            if(this.testCollisionCircleCircle(this.containedEnemies[index], objectDoingTheBumping)){
-              if(ImActuallyMoving){
-                if(objectDoingTheBumping instanceof Player){
-
-                }else if(objectDoingTheBumping instanceof Projectile){
-                  otherObject.attackedBy("blunt", 1, this.angleBetweenPoints(otherObject.getCenter(), objectDoingTheBumping.point2));
-                }else{
-                  this.containedEnemies[index].collidedWith(objectDoingTheBumping);
-                }
-              }
-              return true;
-            }
-          }
+    var otherObject;
+    if(objectDoingTheBumping instanceof Projectile){
+      if(otherObject = this.testCollisionCircleArrayCircle(this.containedEnemies,objectDoingTheBumping,ImActuallyMoving)){
+        //Handle being shot by projectiles
+        //otherObject.attackedBy("blunt", 1, this.angleBetweenPoints(otherObject.getCenter(), objectDoingTheBumping.point2));
+        //otherObject.attackedBy("blunt", 1, 0, 0);
+        console.log("I got hit by a projectile!");
+        return true;
+      }else{
+        return false;
+      }
+    }
+    if(objectDoingTheBumping instanceof Player){
+      if(otherObject = this.testCollisionCircleArrayCircle(this.containedEnemies,objectDoingTheBumping,ImActuallyMoving)){
+        //Players bumping into each other
+        return true;
+      }else{
+        return false;
+      }
+    }
+    if(objectDoingTheBumping instanceof Weapon){
+      if(otherObject = this.testCollisionCircleArrayLine(this.containedEnemies, objectDoingTheBumping, ImActuallyMoving)){
+        //Handles Players hitting each other
+        otherObject.attackedBy("blunt", 1, this.angleBetweenPoints(otherObject.getCenter(), objectDoingTheBumping.point2));
+        return true;
+      }else{
+        return false;
+      }
+    }
+    if(objectDoingTheBumping instanceof Enemy){
+      if(otherObject = this.testCollisionCircleArrayCircle(this.containedEnemies,objectDoingTheBumping,ImActuallyMoving)){
+        //Handles Enemies hitting players
+        return true;
+      }else{
+        return false;
+      }
+    }
+    console.log("There was a collision test condition that wasn't found");
+    return false;
+  }
+  testCollisionRectArrayCircle(rectArray, objectToTest, ImActuallyMoving){
+    for(var index = 0; index < rectArray.length; index++){
+      if(this.testCollisionRectCircle(rectArray[index], objectToTest)){
+        if(ImActuallyMoving){
+          rectArray[index].collidedWith(objectToTest);
         }
-        break;
-      case "Stick":
-        for(var index = 0; index < this.containedEnemies.length; index++){
-          if(this.testCollisionLineCircle(objectDoingTheBumping, this.containedEnemies[index])){
-            var otherObject = this.containedEnemies[index];
-            if(ImActuallyMoving){
-              otherObject.attackedBy("blunt", 1, 0, 0);
-            }
-            return true;
-          }
+        return rectArray[index];
+      }
+    }
+    return false;
+  }
+  testCollisionRectArrayLine(rectArray, objectToTest, ImActuallyMoving){
+    for(var index = 0; index < rectArray.length; index++){
+      if(this.testCollisionLineRect(objectToTest,rectArray[index])){
+        if(ImActuallyMoving){
+          rectArray[index].collidedWith(objectToTest);
         }
-        break;
+        return rectArray[index];
+      }
+    }
+    return false;
+  }
+  testCollisionCircleArrayCircle(circleArray, objectToTest, ImActuallyMoving){
+    for(var index = 0; index < circleArray.length; index++){
+      if(circleArray[index] !== objectToTest){
+        if(this.testCollisionCircleCircle(circleArray[index], objectToTest)){
+          if(ImActuallyMoving){
+            circleArray[index].collidedWith(objectToTest);
+          }
+          return circleArray[index];
+        }
+      }
+    }
+    return false;
+  }
+  testCollisionCircleArrayLine(circleArray, objectToTest, ImActuallyMoving){
+    for(var index = 0; index < circleArray.length; index++){
+      if(this.testCollisionLineCircle(objectToTest, circleArray[index])){
+        if(ImActuallyMoving){
+          circleArray[index].collidedWith(objectToTest);
+        }
+        return circleArray[index];
+      }
     }
     return false;
   }
@@ -461,8 +529,8 @@ class collisionQuadrentContainer{
     return false;
   }
   testCollisionCircleCircle(circleObjectOne, circleObjectTwo){
-    var point1 = {x: circleObjectOne.location.x + circleObjectOne.size.x, y: circleObjectOne.location.y + circleObjectOne.size.y};
-    var point2 = {x: circleObjectTwo.location.x + circleObjectTwo.size.x, y: circleObjectTwo.location.y + circleObjectTwo.size.y};
+    var point1 = {x: circleObjectOne.location.x + circleObjectOne.size.x/2, y: circleObjectOne.location.y + circleObjectOne.size.y/2};
+    var point2 = {x: circleObjectTwo.location.x + circleObjectTwo.size.x/2, y: circleObjectTwo.location.y + circleObjectTwo.size.y/2};
     if(this.distanceBetweenPoints(point1, point2) < circleObjectOne.size.x/2 + circleObjectTwo.size.x/2){
       return true;
     }

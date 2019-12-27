@@ -1,6 +1,6 @@
 const gameEntity = require("../gameEntity.js");
 const Projectile = require("./Projectile.js");
-const Weapon = require("../Equippables/Weapon.js")
+const Weapon = require("../Equippables/Weapon.js");
 const playerSize = 40;
 module.exports = class Player extends gameEntity {
   constructor(
@@ -189,9 +189,9 @@ module.exports = class Player extends gameEntity {
   //#endregion
   //#region Physical Attack Methods
   shootProjectile() {
-    var projectileX = this.location.x;// + this.size.x/2 + Math.cos(this.orientationAngle) * this.size.x/2;
-    var projectileY = this.location.y;// + this.size.y/2 + Math.sin(this.orientationAngle) * this.size.y/2;
     var projectileSize = 10;
+    var projectileX = this.location.x + this.size.x/2 + Math.cos(this.orientationAngle) * (projectileSize/2 + this.size.x/2 + 1) - projectileSize/2;
+    var projectileY = this.location.y + this.size.y/2 + Math.sin(this.orientationAngle) * (projectileSize/2 + this.size.y/2 + 1) - projectileSize/2;
     var projectileSpeed = 1;
     var projectileDY = Math.sin(this.orientationAngle) * projectileSpeed;
     var projectileDX = Math.cos(this.orientationAngle) * projectileSpeed;

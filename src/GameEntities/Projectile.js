@@ -16,32 +16,25 @@ module.exports =  class Projectile extends gameEntity {
     this.damage = 20;
     this.baseColor = "#888";
     this.collisionStyle = "Circle";
+    this.direction = 0;
     this.velocity = {
       x: 0,
       y: 0
     };
   }
-  update() {
-    this.location.x += this.velocity.x;
-    this.location.y += this.velocity.y;
-    if (this.collisionEngine.doesMovementCauseCollision(this)) {
+  testInstantCollision(){
+    if (!this.quadrent.testMovement(this, false)) {
+      console.log("Instant Destory");
       this.destroy();
     }
   }
-  draw(ctx) {
-    this.update();
-    ctx.beginPath();
-    ctx.strokeStyle = this.baseColor;
-    ctx.fillStyle = this.baseColor;
-    ctx.arc(
-      this.location.x + this.size.x / 2,
-      this.location.y + this.size.y / 2,
-      this.size.x / 2,
-      0,
-      2 * Math.PI
-    );
-    //ctx.stroke();
-    ctx.fill();
-    ctx.closePath();
+  update() {
+    this.location.x += this.velocity.x;
+    this.location.y += this.velocity.y;
+    if (!this.quadrent.testMovement(this, true)) {
+      this.destroy();
+    }else{
+      this.quadrent.checkEntityImmigration(this);
+    }
   }
 }

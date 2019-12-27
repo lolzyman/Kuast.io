@@ -57,10 +57,12 @@ module.exports = class CollisionEngine {
     var walls = [];
     var enemies = [];
     var floors = [];
+    var projectiles = [];
     var playersObjectArray = [];
     var wallsObjectArray = [];
     var enemiesObjectArray = [];
     var floorObjectArray = [];
+    var projectilObjectArray = [];
     for(var x = 0; x < this.quadrents.length; x++){
       for(var y = 0; y < this.quadrents.length; y++){
         if(this.quadrents[x][y].containsPlayerID(playerID)){
@@ -73,6 +75,7 @@ module.exports = class CollisionEngine {
       containingQuadrent.getReleventWalls(wallsObjectArray);
       containingQuadrent.getReleventEnemies(enemiesObjectArray);
       containingQuadrent.getReleventFloors(floorObjectArray);
+      containingQuadrent.getReleventProjectiles(projectilObjectArray);
       playersObjectArray.forEach(function(item, index, array){
         if(item.uniquePlayerID != playerID){
           otherPlayers.push({
@@ -103,12 +106,16 @@ module.exports = class CollisionEngine {
       floorObjectArray.forEach(element=>{
         floors.push({x:element.location.x,y:element.location.y,transparent:element.transparent});
       });
+      projectilObjectArray.forEach(element=>{
+        projectiles.push({x:element.location.x,y:element.location.y,size:element.size,angle:element.orientation});
+      })
     }else{
     }
     playerViewObject.walls = walls;
     playerViewObject.otherPlayers = otherPlayers;
     playerViewObject.enemies = enemies;
     playerViewObject.floors = floors;
+    playerViewObject.projectiles = projectiles;
     return playerViewObject;
   }
   addObject(object) {
@@ -341,27 +348,30 @@ class collisionQuadrentContainer{
   doesThisHitAnEnemy(objectDoingTheBumping, ImActuallyMoving){
     switch(objectDoingTheBumping.collisionStyle){
       case "Circle":
-        /* This Implementation Needs to be updated
-        for(var index = 0; index < this.containedWalls.length; index++){
-          if(this.testCollisionRectCircle(this.containedWalls[index], objectDoingTheBumping)){
-            if(ImActuallyMoving){
-              if(objectDoingTheBumping instanceof Player){
+        for(var index = 0; index < this.containedEnemies.length; index++){
+          var otherObject = this.containedEnemies[index]
+          if(objectDoingTheBumping != otherObject){
+            if(this.testCollisionCircleCircle(this.containedEnemies[index], objectDoingTheBumping)){
+              if(ImActuallyMoving){
+                if(objectDoingTheBumping instanceof Player){
 
-              }else{
-                this.containedWalls[index].collidedWith(objectDoingTheBumping);
+                }else if(objectDoingTheBumping instanceof Projectile){
+                  otherObject.attackedBy("blunt", 1, this.angleBetweenPoints(otherObject.getCenter(), objectDoingTheBumping.point2));
+                }else{
+                  this.containedEnemies[index].collidedWith(objectDoingTheBumping);
+                }
               }
+              return true;
             }
-            return true;
           }
         }
-        //*/
         break;
       case "Stick":
         for(var index = 0; index < this.containedEnemies.length; index++){
           if(this.testCollisionLineCircle(objectDoingTheBumping, this.containedEnemies[index])){
             var otherObject = this.containedEnemies[index];
             if(ImActuallyMoving){
-              otherObject.attackedBy("blunt", 1, this.angleBetweenPoints(otherObject.getCenter(), objectDoingTheBumping.point2));
+              otherObject.attackedBy("blunt", 1, 0, 0);
             }
             return true;
           }
@@ -524,12 +534,6 @@ class collisionQuadrentContainer{
   //#region Player View Methods
   getReleventPlayers(arrayForPlayers){
     this.containedPlayers.forEach(Element=>{
-      /*
-      console.log("new Reading");
-      console.log(Element.quadrent.northWesternQuadrent === undefined,Element.quadrent.northernQuadrent === undefined,Element.quadrent.northEasternQuadrent === undefined);
-      console.log(Element.quadrent.westernQuadrent === undefined,undefined === undefined,Element.quadrent.easternQuadrent === undefined);
-      console.log(Element.quadrent.southWesternQuadrent === undefined,Element.quadrent.southernQuadrent === undefined,Element.quadrent.southEasternQuadrent === undefined);
-      //*/
       arrayForPlayers.push(Element);
     });
     for(var index = 0; index < this.adjacentQuadrents.length; index++){
@@ -565,6 +569,16 @@ class collisionQuadrentContainer{
     for(var index = 0; index < this.adjacentQuadrents.length; index++){
       for(var secondIndex = 0; secondIndex < this.adjacentQuadrents[index].containedFloor.length; secondIndex++){
         arrayForFloors.push(this.adjacentQuadrents[index].containedFloor[secondIndex]);
+      }
+    }
+  }
+  getReleventProjectiles(arrayForProjectiles){
+    this.containedProjectiles.forEach(element =>{
+      arrayForProjectiles.push(element);
+    });
+    for(var index = 0; index < this.adjacentQuadrents.length; index++){
+      for(var secondIndex = 0; secondIndex < this.adjacentQuadrents[index].containedProjectiles.length; secondIndex++){
+        arrayForProjectiles.push(this.adjacentQuadrents[index].containedProjectiles[secondIndex]);
       }
     }
   }
@@ -635,7 +649,6 @@ class collisionQuadrentContainer{
       this.containedPlayers.push(EntityToAdd);
       return;
     }
-    
     if(EntityToAdd instanceof Projectile){
       this.containedProjectiles.push(EntityToAdd);
       return;
@@ -721,12 +734,18 @@ class collisionQuadrentContainer{
     this.containedEnemies.forEach(element =>{
       element.update();
     });
+    this.containedProjectiles.forEach(element =>{
+      element.update();
+    });
     this.adjacentQuadrents.forEach(element =>{
       element.secondaryUpdate();
     });
   }
   secondaryUpdate(){
     this.containedEnemies.forEach(element =>{
+      element.update();
+    });
+    this.containedProjectiles.forEach(element =>{
       element.update();
     });
   }

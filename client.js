@@ -221,74 +221,26 @@ connection.onmessage = function (message) {
   //#endregion
   });
   //#endregion
+  //#region Draws Projectiles
+  json.projectiles.forEach(element=>{
+    drawProjectile(element);
+  });
+  //#endregion
   //#region Draw Walls
-    var counter = {point1s:0,point2s:0,point3s:0,point4s:0};
-    var northWestWalls = [];
-    var northEastWalls = [];
-    var southWestWalls = [];
-    var southEastWalls = [];
     var wallDrawArray = []
-    //Sorts Walls into their Quadrents
-    json.walls.forEach(element =>{
-      if(element.x < xOffset - playerSize){
-        //Element is to the left
-        if(element.y < yOffset - playerSize){
-          northWestWalls.push(element);
-        }else if(element.y < yOffset){
-          northWestWalls.push(element);
-          southWestWalls.push(element);
-        }else{
-          southWestWalls.push(element);
-        }
-      }else if(element.x < xOffset){
-        if(element.y < yOffset - playerSize){
-          northWestWalls.push(element);
-          northEastWalls.push(element);
-        }else if(element.y < yOffset){
-          //player is in the wall
-          northWestWalls.push(element);
-          northEastWalls.push(element);
-          southWestWalls.push(element);
-          southEastWalls.push(element);
-        }else{
-          southWestWalls.push(element);
-          southEastWalls.push(element);
-        }
-      }else{
-        //Element is to the right
-        if(element.y < yOffset - playerSize){
-          northEastWalls.push(element);
-        }else if(element.y < yOffset){
-          northEastWalls.push(element);
-          southEastWalls.push(element);
-        }else{
-          southEastWalls.push(element);
-        }
-      }
-    });
-    northWestWalls.sort(furthestWallSorter);
-    southWestWalls.sort(furthestWallSorter);
-    southEastWalls.sort(furthestWallSorter);
-    southWestWalls.sort(furthestWallSorter);
     json.walls.sort(furthestWallSorter);
-    //selectSeenWalls(northWestWalls, wallDrawArray);
-    //selectSeenWalls(southWestWalls, wallDrawArray);
-    //selectSeenWalls(northEastWalls, wallDrawArray);
-    //selectSeenWalls(southEastWalls, wallDrawArray);
     selectSeenWalls(json.walls, wallDrawArray);
     wallDrawArray.forEach(element =>{
       if(calculateDistance({x:element.x - xOffset + xCenter, y:element.y-yOffset + yCenter}, {x:xCenter, y:yCenter}) < Math.SQRT2 * 250){
-        drawBlackOut(element,counter);
-        //drawWall(element);
+        drawBlackOut(element);
       }
     });
     wallDrawArray.forEach(element =>{
       if(calculateDistance({x:element.x - xOffset + xCenter, y:element.y-yOffset + yCenter}, {x:xCenter, y:yCenter}) < Math.SQRT2 * 250){
-        //drawBlackOut(element,counter);
         drawWall(element);
       }
     });
-    //#endregion
+  //#endregion
   //#region Draw Current Player
   //#region Draw Body
   ctx.beginPath();
@@ -334,9 +286,19 @@ connection.onmessage = function (message) {
                                     respawnAction: respawnAction}));
     //#endregion
 };
-
+function drawProjectile(projectile){
+  var projectileLocation = covertWorldPointToScreenPoint(projectile);
+  var projectileCenter = {x:projectileLocation.x + projectile.size.x,y:projectileLocation.y + projectile.size.y};
+  //console.log("Im drawing stones", projectileCenter, projectile.size);
+  ctx.beginPath();
+  ctx.arc(projectileCenter.x,projectileCenter.y, projectile.size.x/2,0, Math.PI * 2);
+  ctx.fillStyle = "red";
+  ctx.strokeStyle = "blue";
+  ctx.closePath();
+  ctx.stroke();
+  ctx.fill();
+}
 function drawWall(wallObject){
-  //The dark scheme needs optimization, because currently it lags and doesn't draw dark well enough
   ctx.beginPath();
   ctx.fillStyle = "grey";
   ctx.strokeStyle = "red";
@@ -402,7 +364,6 @@ function covertWorldPointsToScreenPoints(pointsArray){
   }
   return convertedPointsArray;
 }
-
 //This is a true Collision with collision hit box
 function checkVisionWallCollision(targetWall, arrayOfWall, targetIndex){
   var cornersAreBlocked = [false, false, false, false];
@@ -523,7 +484,7 @@ function drawSword(xpos, ypos, swordLength, swordAngle){
 }
 
 //Needs Optimization
-function drawBlackOut(rectObject,angleCounter){
+function drawBlackOut(rectObject){
   var rectPoint1 = {x:rectObject.x - xOffset,y:rectObject.y - yOffset};
   var rectPoint2 = {x:rectObject.x - xOffset+ playerSize,y:rectObject.y - yOffset};
   var rectPoint3 = {x:rectObject.x - xOffset+ playerSize,y:rectObject.y - yOffset + playerSize};
@@ -534,7 +495,6 @@ function drawBlackOut(rectObject,angleCounter){
   var angle = calculateAngle(rectPoint1);
   if(angle % Math.PI > Math.PI/2){
     point1 = rectPoint1;
-    angleCounter.point1s++;
   }
 
   var angle = calculateAngle(rectPoint2);
@@ -544,7 +504,6 @@ function drawBlackOut(rectObject,angleCounter){
     }else{
       point2 = rectPoint2;
     }
-    angleCounter.point2s++;
   }
 
   var angle = calculateAngle(rectPoint3);
@@ -554,7 +513,6 @@ function drawBlackOut(rectObject,angleCounter){
     }else{
       point2 = rectPoint3;
     }
-    angleCounter.point3s++;
   }
   
   var angle = calculateAngle(rectPoint4);
@@ -564,7 +522,6 @@ function drawBlackOut(rectObject,angleCounter){
     }else{
       point2 = rectPoint4;
     }
-    angleCounter.point4s++;
   }
   //draws Blackout
   ctx.beginPath();

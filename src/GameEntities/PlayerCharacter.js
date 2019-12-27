@@ -85,6 +85,16 @@ module.exports = class Player extends gameEntity {
     
     }
     //#endregion
+    //#region Handles Shooting Stones
+    if(this.shooting && this.currentShotCooldown <= 0){
+      this.shootProjectile();
+      this.currentShotCooldown = this.shootCooldown;
+      this.shooting = false;
+    }else{
+      this.currentShotCooldown--;
+      this.shooting = false;
+    }
+    //#endregion
     //#region Forced Respawn
     //This is the a debug feature allowing players to teleport back to the start of the map
     if(this.respawnRequest && this.respawnCooldown <= 0){
@@ -179,25 +189,23 @@ module.exports = class Player extends gameEntity {
   //#endregion
   //#region Physical Attack Methods
   shootProjectile() {
-    var projectileX = 0;
-    var projectileY = 0;
+    var projectileX = this.location.x;// + this.size.x/2 + Math.cos(this.orientationAngle) * this.size.x/2;
+    var projectileY = this.location.y;// + this.size.y/2 + Math.sin(this.orientationAngle) * this.size.y/2;
     var projectileSize = 10;
-    var projectileSpeed = 2;
-    var projectileDX = Math.sin(this.orientationAngle) * projectileSpeed;
-    var projectileDY = Math.cos(this.orientationAngle) * projectileSpeed;
+    var projectileSpeed = 1;
+    var projectileDY = Math.sin(this.orientationAngle) * projectileSpeed;
+    var projectileDX = Math.cos(this.orientationAngle) * projectileSpeed;
     var dummyProjectile = new Projectile(
       projectileX,
       projectileY,
       projectileSize,
       this.collisionEngine
     );
-    if (!this.collisionEngine.doesMovementCauseCollision(dummyProjectile)) {
-      dummyProjectile.velocity.x = projectileDX;
-      dummyProjectile.velocity.y = projectileDY;
-      this.drawnArray.push(dummyProjectile);
-    }
-    //Not adding the projectile to the physics Engine untill a later update
-    this.quadrent.addObject(dummyProjectile);
+    dummyProjectile.orientation = this.orientationAngle;
+    dummyProjectile.velocity.x = projectileDX;
+    dummyProjectile.velocity.y = projectileDY;
+    this.quadrent.addEntity(dummyProjectile);
+    dummyProjectile.testInstantCollision();
   }
   swingMeleeWeapon(){
     this.currentSwordAngle += this.swingArcAngle / this.swordSwingDuration;
@@ -244,7 +252,10 @@ module.exports = class Player extends gameEntity {
     this.orientationAngle = playerKeyInfo.orientation;
     this.respawnRequest = playerKeyInfo.respawnAction;
     if(playerKeyInfo.swingAction){
-      this.swingingSword = playerKeyInfo.swingAction;
+      this.swingingSword = true;
+    }
+    if(playerKeyInfo.shootAction){
+      this.shooting = true;
     }
   }
   //#endregion

@@ -99,5 +99,5 @@ function serverLoop(){
   
   //Used for monitoring the Server Loop Time
   //Calculates the expected server fps
-  //console.log("This loop ran at: " + expectedFPS + " FPS");
+  //console.log("This loop ran at: " + expectedFPS + " FPS. The loop took " + timeEllaspsed + " seconds");
 }

@@ -39,12 +39,12 @@ var server = http.createServer(function (req, res) {
     // Tries to collect the file that the user is looking for.
     // This applies for webpages looking for scripts.
     // Handles files that don't exist
-    console.log(fileName);
+    console.log("'"+fileName+"'");
     if(fileName === ".//reset"){
       resetServer();
     }
     if(fileName === ".//"){
-      fileName === ".//game.html";
+      fileName = ".//game.html";
     }
     if(fileName === ".//portFinder.js"){
       res.writeHead(200, {'Content-Type': 'application/javascript'});

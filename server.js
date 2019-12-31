@@ -39,6 +39,10 @@ http.createServer(function (req, res) {
     // Tries to collect the file that the user is looking for.
     // This applies for webpages looking for scripts.
     // Handles files that don't exist
+    console.log(fileName);
+    if(fileName === ".//reset"){
+      resetServer();
+    }
     fs.readFile(fileName, function(err, data) {
         
       if (err) {
@@ -100,4 +104,9 @@ function serverLoop(){
   //Used for monitoring the Server Loop Time
   //Calculates the expected server fps
   //console.log("This loop ran at: " + expectedFPS + " FPS. The loop took " + timeEllaspsed + " seconds");
+}
+
+function resetServer(){
+  //gameEngine = new GameEngine();
+  gameEngine.reset();
 }

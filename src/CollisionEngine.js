@@ -5,10 +5,12 @@ const Enemy = require("./GameEntities/Enemy.js");
 const Projectile = require("./GameEntities/Projectile.js");
 const Floor = require("./GameEntities/FloorTile.js");
 const Weapon = require("./Equippables/Weapon.js");
+const VisionEngine = require("./visionEngine.js");
 
 const quadrentSize = 10;
 const gridSize = 40;
-
+let xDim = 0;
+let yDim = 0;
 module.exports = class CollisionEngine {
   constructor(xSize, ySize) {
     //Default Definition where we determine the sizes of each of the quadrents. This is important
@@ -16,7 +18,11 @@ module.exports = class CollisionEngine {
     this.connectedPlayers = [];
     this.quadrents = [];
     this.spawnLocations = [];
+    this.visionEngine = new VisionEngine(20);
+    this.oneOff = true;
     //Creates the Quadrents
+    xDim = xSize;
+    yDim = ySize;
     for(var x = 0; x < Math.ceil(xSize / quadrentSize / gridSize); x++){
       var quadrentRows = [];
       for(var y = 0; y < Math.ceil(ySize / quadrentSize / gridSize); y++){
@@ -51,8 +57,49 @@ module.exports = class CollisionEngine {
     }
     
   }
+  clear(){
+    this.quadrents = [];
+    //Creates the Quadrents
+    for(var x = 0; x < Math.ceil(xDim / quadrentSize / gridSize); x++){
+      var quadrentRows = [];
+      for(var y = 0; y < Math.ceil(yDim / quadrentSize / gridSize); y++){
+        var newQuadrent = new collisionQuadrentContainer({x:x*quadrentSize * gridSize, y:y*quadrentSize * gridSize},{x:(x+1)*quadrentSize * gridSize, y:(y+1)*quadrentSize * gridSize}, this);
+        quadrentRows.push(newQuadrent);
+      }
+      this.quadrents.push(quadrentRows);
+    }
+    //lets the Quadrents see each other
+    for(var x = 0; x < this.quadrents.length; x++){
+      for(var y = 0; y < this.quadrents[x].length; y++){
+        var quadrentInQuestion = this.quadrents[x][y];
+        if(x != 0 && y != 0)
+          quadrentInQuestion.setNorthWesternQuadrent(this.quadrents[x-1][y-1]);
+        if(x != 0)
+          quadrentInQuestion.setWesternQuadrent(this.quadrents[x-1][y]);
+        if(x != 0 && y != this.quadrents[x].length - 1)
+          quadrentInQuestion.setSouthWesternQuadrent(this.quadrents[x-1][y+1]);
+        if(y != 0)
+          quadrentInQuestion.setNorthernQuadrent(this.quadrents[x][y-1]);
+        if(x != this.quadrents.length - 1)
+          quadrentInQuestion.setNorthEasternQuadrent(this.quadrents[x+1][y-1]);
+        if(x != this.quadrents.length - 1)
+          quadrentInQuestion.setEasternQuadrent(this.quadrents[x+1][y]);
+        if(y != this.quadrents[x].length - 1)
+          quadrentInQuestion.setSothernQuadrent(this.quadrents[x][y+1]);
+        if(y != this.quadrents[x].length - 1 && x != this.quadrents.length - 1)
+          quadrentInQuestion.setSouthEasternQuadrent(this.quadrents[x+1][y+1]);
+        quadrentInQuestion.updateAdjacentQuadrents();
+      }
+    }
+    this.connectedPlayers.forEach(element =>{
+      element.location.x = this.spawnLocations[0].location.x;
+      element.location.y = this.spawnLocations[0].location.y;
+      this.assignObjectToQuadrent(element);
+    })
+  }
   getPlayerView(playerID){
     var containingQuadrent;
+    var targetPlayer;
     var playerViewObject = {};
     var otherPlayers = [];
     var walls = [];
@@ -64,19 +111,41 @@ module.exports = class CollisionEngine {
     var enemiesObjectArray = [];
     var floorObjectArray = [];
     var projectilObjectArray = [];
+    var seenPlayers = [];
+    var seenWalls = [];
+    var seenEnemies = [];
+    var seenFloors = [];
+    var seenProjectiles = [];
     for(var x = 0; x < this.quadrents.length; x++){
       for(var y = 0; y < this.quadrents.length; y++){
         if(this.quadrents[x][y].containsPlayerID(playerID)){
           containingQuadrent = this.quadrents[x][y];
+          targetPlayer = containingQuadrent.getPlayer(playerID);
         }
       }
     }
     if(containingQuadrent != undefined){
+      this.visionEngine.setTargetEyes(targetPlayer.location.x + targetPlayer.size.x/2, targetPlayer.location.y + targetPlayer.size.y/2);
+      if(this.oneOff){
+        console.log(targetPlayer.location.x, targetPlayer.location.y);
+      }
       containingQuadrent.getReleventPlayers(playersObjectArray);
       containingQuadrent.getReleventWalls(wallsObjectArray);
       containingQuadrent.getReleventEnemies(enemiesObjectArray);
       containingQuadrent.getReleventFloors(floorObjectArray);
       containingQuadrent.getReleventProjectiles(projectilObjectArray);
+      //this.visionEngine.selectVisibleEntities(playersObjectArray, seenPlayers, wallsObjectArray);
+      var start = Date.now();
+      //this.visionEngine.selectVisibleEntities(wallsObjectArray, seenWalls, wallsObjectArray);
+      this.visionEngine.selectBlockingWalls(wallsObjectArray, seenWalls);
+      //playerViewObject.lines = this.visionEngine.renderLines;
+      var timeEllaspsed = (Date.now() - start);
+
+      if(this.oneOff){
+        console.log("The vision system took " + timeEllaspsed + " milliseconds. " + seenWalls.length + " walls were found. :(");
+        this.oneOff = false;
+      }
+      
       playersObjectArray.forEach(function(item, index, array){
         if(item.uniquePlayerID != playerID){
           otherPlayers.push({
@@ -98,9 +167,14 @@ module.exports = class CollisionEngine {
           }
         }
       });
+      seenWalls.forEach(element =>{
+        walls.push({x:element.location.x,y:element.location.y,transparent:element.transparent});
+      });
+      /*
       wallsObjectArray.forEach(element =>{
         walls.push({x:element.location.x,y:element.location.y,transparent:element.transparent});
       });
+      //*/
       enemiesObjectArray.forEach(element =>{
         enemies.push({x:element.location.x,y:element.location.y,health:element.getHealthPercentage(),transparent:element.transparent});
       });
@@ -256,6 +330,13 @@ class collisionQuadrentContainer{
     }
     if(this.southEasternQuadrent != undefined){
       this.adjacentQuadrents.push(this.southEasternQuadrent);
+    }
+  }
+  getPlayer(playerID){
+    for(var index = 0; index < this.containedPlayers.length; index++){
+      if(this.containedPlayers[index].uniquePlayerID === playerID){
+        return this.containedPlayers[index];
+      }
     }
   }
   //#region Collision Test Methods

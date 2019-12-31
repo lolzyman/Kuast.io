@@ -53,7 +53,10 @@ module.exports = class GameEngine{
       }
     });
   }
-
+  reset(){
+    this.collisionEngine.clear();
+    this.generateLevel001();
+  }
   getClientInfo(playerIndex){
     return this.collisionEngine.getPlayerView(playerIndex);
   }

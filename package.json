@@ -9,5 +9,13 @@
       "program": "${workspaceFolder}\\bin\\www"
     }
   ],
-  "main":"server.js"
+  "main":"server.js",
+  "engines": {
+    "node": "8.10.x"
+  },
+  "dependencies": {
+    "websocket": "1.0.31",
+    "url": "0.11.0",
+    "fs": "0.0.1-security"
+  }
 }

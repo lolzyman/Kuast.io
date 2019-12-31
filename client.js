@@ -1,3 +1,4 @@
+// Link Server https://intense-reef-90904.herokuapp.com/
 "use strict";  // for better performance - to avoid searching in DOM
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
@@ -226,10 +227,6 @@ connection.onmessage = function (message) {
   //#region Draws Projectiles
   json.projectiles.forEach(element=>{
     drawProjectile(element);
-  });
-  
-  json.lines.forEach(element=>{
-    drawLine(element);
   });
   //#endregion
   //#region Draw Walls

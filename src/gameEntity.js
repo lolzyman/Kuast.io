@@ -46,5 +46,7 @@ module.exports = class gameEntity {
     return{x: this.location.x + this.size.x, y: this.location.y + this.size.y}
   }
   collidedWith(objectHittingMe) {}
-  draw(ctx) {}
+  getBoundingBox(){
+    return {x:this.location.x, y:this.location.y, size:this.size};
+  }
 }

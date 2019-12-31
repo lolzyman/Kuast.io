@@ -1,27 +1,26 @@
 {
   "name": "dungeonrpg",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.html",
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}\\bin\\www"
+    }
+  ]
+}
+/*
+  "main": "gameServer.js",
   "scripts": {
-    "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "start": "parcel gameServer.js --open",
+    "build": "parcel build gameServer.js"
   },
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "7.2.0",
     "parcel-bundler": "^1.6.1"
   },
-  "keywords": [],
-  "autofold.default": 0,
-  "autofold.delay": 250,
-  "autofold.pack": false,
-  "autofold.types": [
-		{ "ext": ".js", "level": 1 },
-		{ "ext": ".c", "level": 1 },
-		{ "ext": ".cs", "level": 2 },
-		{ "ext": ".conf.php", "level": 1 },
-		{ "ext": ".php", "level": 2 }
-  ],
-  "autofold.unfold": false
+  "keywords": ["quast.io"]
 }
+//*/

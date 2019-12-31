@@ -93,6 +93,7 @@ console.log(process.env.PORT);
 // WebSocket server is tied to a HTTP server. WebSocket request is just an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
 //*
 var wsServer = new Server({server});
+var oneOff = true;
 console.log("upgrade should have worked");
 // This callback function is called every time someone tries to connect to the WebSocket server
 wsServer.on('connection', function(connection) {
@@ -102,7 +103,7 @@ wsServer.on('connection', function(connection) {
   var index = clients.push([connection, assignedCharacterIndex]) - 1;
   console.log((new Date()) + ' Connection accepted.');
   connection.send(JSON.stringify(gameEngine.getClientInfo(assignedCharacterIndex)));
-
+  oneOff = true;
   connection.on('message', function(message) {
     var json = JSON.parse(message);
     gameEngine.recievePlayerInput(json, assignedCharacterIndex);
@@ -120,8 +121,7 @@ wsServer.onopen = function(){
   connection.send(JSON.stringify(gameEngine.getClientInfo(assignedCharacterIndex)));
 }
 //*/
-setInterval(serverLoop, 10);
-
+setInterval(serverLoop, 50);
 function serverLoop(){
   var start = Date.now();
   gameEngine.gameLoop();
@@ -135,7 +135,10 @@ function serverLoop(){
   
   //Used for monitoring the Server Loop Time
   //Calculates the expected server fps
-  //console.log("This loop ran at: " + expectedFPS + " FPS. The loop took " + timeEllaspsed + " seconds");
+  if(oneOff){
+    console.log("This loop ran at: " + expectedFPS + " FPS. The loop took " + timeEllaspsed + " seconds");
+    oneOff = false;
+  }
 }
 
 function resetServer(){

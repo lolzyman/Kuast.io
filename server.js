@@ -95,6 +95,7 @@ console.log(process.env.PORT);
 // WebSocket server is tied to a HTTP server. WebSocket request is just an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
 //*
 var wsServer = new Server({server});
+console.log("upgrade should have worked");
 // This callback function is called every time someone tries to connect to the WebSocket server
 wsServer.on('request', function(request) {
   // accept connection - you should check 'request.origin' to make sure that client is connecting from your website (http://en.wikipedia.org/wiki/Same_origin_policy)

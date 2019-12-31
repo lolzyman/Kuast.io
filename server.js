@@ -21,8 +21,6 @@ const options = {
 /**
  * Global variables
  */
-// latest 100 messages
-var history = [ ];
 // list of currently connected clients (users)
 var clients = [ ];/**
  * Helper function for escaping input strings
@@ -97,18 +95,16 @@ console.log(process.env.PORT);
 var wsServer = new Server({server});
 console.log("upgrade should have worked");
 // This callback function is called every time someone tries to connect to the WebSocket server
-wsServer.on('request', function(request) {
+wsServer.on('connection', function(connection) {
   // accept connection - you should check 'request.origin' to make sure that client is connecting from your website (http://en.wikipedia.org/wiki/Same_origin_policy)
-  console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
-  var connection = request.accept(null, request.origin); 
   // we need to know client index to remove them on 'close' event
   var assignedCharacterIndex = gameEngine.addPlayer();
   var index = clients.push([connection, assignedCharacterIndex]) - 1;
   console.log((new Date()) + ' Connection accepted.');
-  connection.sendUTF(JSON.stringify(gameEngine.getClientInfo(assignedCharacterIndex)));
+  connection.send(JSON.stringify(gameEngine.getClientInfo(assignedCharacterIndex)));
 
   connection.on('message', function(message) {
-    var json = JSON.parse(message.utf8Data);
+    var json = JSON.parse(message);
     gameEngine.recievePlayerInput(json, assignedCharacterIndex);
   });  // user disconnected
   connection.on('close', function(connection) {
@@ -117,6 +113,12 @@ wsServer.on('request', function(request) {
     clients.splice(index, 1);
   });
 });
+wsServer.onopen = function(){
+  var assignedCharacterIndex = gameEngine.addPlayer();
+  var index = clients.push([connection, assignedCharacterIndex]) - 1;
+  console.log((new Date()) + ' Connection accepted.');
+  connection.send(JSON.stringify(gameEngine.getClientInfo(assignedCharacterIndex)));
+}
 //*/
 setInterval(serverLoop, 10);
 
@@ -126,7 +128,7 @@ function serverLoop(){
   for(var i = 0; i < clients.length; i++){
     var targetConnection = clients[i][0];
     var playerID = clients[i][1];
-    targetConnection.sendUTF(JSON.stringify(gameEngine.getClientInfo(playerID)));
+    targetConnection.send(JSON.stringify(gameEngine.getClientInfo(playerID)));
   }
   var timeEllaspsed = (Date.now() - start)/1000;
   var expectedFPS = 1/timeEllaspsed;

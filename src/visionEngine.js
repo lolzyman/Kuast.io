@@ -1,5 +1,3 @@
-
-
 module.exports =  class VisionEngine{
   constructor(maxRenderDistance){
     this.maxRenderDistance = 210 * Math.SQRT2;

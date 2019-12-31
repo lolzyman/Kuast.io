@@ -61,6 +61,7 @@ var server = http.createServer(options, function (req, res) {
         res.write("var gameServerPort = 'wss://localhost:5000'");
       }else{
         res.write("var gameServerPort = 'wss://quast.herokuapp.com:" + process.env.PORT + "';");
+        res.write("console.log(gameServerPort)");
         console.log("Step 1.5");
       }
       return res.end();
@@ -84,6 +85,7 @@ var server = http.createServer(options, function (req, res) {
   }).listen(process.env.PORT || 5000);
 
 console.log("Testing Log Files");
+console.log(process.env.PORT);
 //Tells the server to start listening on the specified port
 server.listen(webSocketsServerPort);/**
  * WebSocket server

@@ -58,7 +58,7 @@ http.createServer(function (req, res) {
       res.write(data);
       return res.end();
     });
-  }).listen(8090);
+  }).listen($PORT);
 
 console.log("Testing Log Files");
 //Tells the server to start listening on the specified port

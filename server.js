@@ -25,13 +25,13 @@ function htmlEntities(str) {
 }
 /**
  * HTTP server
- */
+ 
 var server = http.createServer(function(request, response) {
   // Not important for us. We're writing WebSocket server,
   // not HTTP server
 });
-
-http.createServer(function (req, res) {
+*/
+var server = http.createServer(function (req, res) {
     // Gets the information that the user is requesting. Useful for handling what to send to the user
     var q = url.parse(req.url, true);
     var fileName = "./" + q.pathname;
@@ -40,6 +40,7 @@ http.createServer(function (req, res) {
     // This applies for webpages looking for scripts.
     // Handles files that don't exist
     console.log(fileName);
+    console.log(q);
     if(fileName === ".//reset"){
       resetServer();
     }

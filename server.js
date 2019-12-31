@@ -4,10 +4,17 @@ const GameEngine = require("./src/gameEngine.js");
 process.title = 'node-chat';// Port where we'll run the websocket server
 var webSocketsServerPort = 1337;// websocket and http servers
 var webSocketServer = require('websocket').server;
-var http = require('http');
+var http = require('https');
 var url = require('url');
 var fs = require('fs');
+var crypto = require('crypto');
 let gameEngine = new GameEngine();
+
+const options = {
+  key: fs.readFileSync('keys/key.pem'),
+  cert: fs.readFileSync('keys/cert.pem'),
+  passphrase: "apples"
+};
 
 /**
  * Global variables
@@ -24,15 +31,16 @@ function htmlEntities(str) {
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 /**
- * HTTP server
+ * HTTPs server
  
 var server = http.createServer(function(request, response) {
   // Not important for us. We're writing WebSocket server,
   // not HTTP server
 });
 */
-var server = http.createServer(function (req, res) {
+var server = http.createServer(options, function (req, res) {
     // Gets the information that the user is requesting. Useful for handling what to send to the user
+    console.log(url.origin);
     var q = url.parse(req.url, true);
     var fileName = "./" + q.pathname;
     var fileInfo = fileName.split(".");
@@ -49,9 +57,9 @@ var server = http.createServer(function (req, res) {
     if(fileName === ".//portFinder.js"){
       res.writeHead(200, {'Content-Type': 'application/javascript'});
       if(process.env.PORT === undefined){
-        res.write("var gameServerPort = 'ws://localhost:5000'");
+        res.write("var gameServerPort = 'wss://localhost:5000'");
       }else{
-        res.write("var gameServerPort = 'ws://quast.herokuapp.com:" + process.env.PORT + "';");
+        res.write("var gameServerPort = 'wss://quast.herokuapp.com:" + process.env.PORT + "';");
       }
       return res.end();
     }

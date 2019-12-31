@@ -54,15 +54,18 @@ var server = http.createServer(options, function (req, res) {
     if(fileName === ".//"){
       fileName = ".//game.html";
     }
+    console.log("Step 1");
     if(fileName === ".//portFinder.js"){
       res.writeHead(200, {'Content-Type': 'application/javascript'});
       if(process.env.PORT === undefined){
         res.write("var gameServerPort = 'wss://localhost:5000'");
       }else{
         res.write("var gameServerPort = 'wss://quast.herokuapp.com:" + process.env.PORT + "';");
+        console.log("Step 1.5");
       }
       return res.end();
     }
+    console.log("Step 2");
     fs.readFile(fileName, function(err, data) {
         
       if (err) {

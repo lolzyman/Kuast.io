@@ -87,7 +87,11 @@ var server = http.createServer(function (req, res) {
 console.log("Testing Log Files");
 console.log(process.env.PORT);
 //Tells the server to start listening on the specified port
-server.listen(webSocketsServerPort);/**
+server.listen(webSocketsServerPort,function () {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log('running at http://' + host + ':' + port)
+});/**
  * WebSocket server
  */
 // WebSocket server is tied to a HTTP server. WebSocket request is just an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6

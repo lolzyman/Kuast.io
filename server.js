@@ -92,6 +92,7 @@ console.log(process.env.PORT);
  */
 // WebSocket server is tied to a HTTP server. WebSocket request is just an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
 //*
+
 var wsServer = new Server({server});
 var oneOff = true;
 console.log("upgrade should have worked");

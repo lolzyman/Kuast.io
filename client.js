@@ -145,9 +145,14 @@ targetGameServer = 'ws://localhost:1337'; // Configuration for running developme
 
 // Server that is used to determine things like login information, character class selection and other things that don't need a deticated websocket
 var targetInfoServer;
-
+var connection;
 // open connection
-var connection = new WebSocket(targetGameServer);
+if(gameServerPort != undefined){
+  console.log(gameServerPort);
+  connection = new WebSocket(gameServerPort, "optionalProtocol");
+  console.log("connection Properly Defined");
+  //new WebSocket("ws://destination.server.ext", "optionalProtocol");
+}
 
 //Connection Initialization
 connection.onopen = function () {

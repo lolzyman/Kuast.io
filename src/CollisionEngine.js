@@ -416,7 +416,7 @@ class collisionQuadrentContainer{
     if(objectDoingTheBumping instanceof Player){
       if(otherObject = this.testCollisionCircleArrayCircle(this.containedPlayers,objectDoingTheBumping,ImActuallyMoving)){
         //Players bumping into each other
-        console.log("Here I think there is self collision");
+        //console.log("Here I think there is self collision");
         return true;
       }else{
         return false;

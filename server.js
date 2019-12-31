@@ -40,12 +40,20 @@ var server = http.createServer(function (req, res) {
     // This applies for webpages looking for scripts.
     // Handles files that don't exist
     console.log(fileName);
-    console.log(q);
     if(fileName === ".//reset"){
       resetServer();
     }
     if(fileName === ".//"){
       fileName === ".//game.html";
+    }
+    if(fileName === ".//portFinder.js"){
+      res.writeHead(200, {'Content-Type': 'application/javascript'});
+      if(process.env.PORT === undefined){
+        res.write("var gameServerPort = 'ws://localhost:5000'");
+      }else{
+        res.write("var gameServerPort = 'https://quast.herokuapp.com" + process.env.PORT + "';");
+      }
+      return res.end();
     }
     fs.readFile(fileName, function(err, data) {
         

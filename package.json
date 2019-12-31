@@ -8,5 +8,6 @@
       "name": "Launch Program",
       "program": "${workspaceFolder}\\bin\\www"
     }
-  ]
+  ],
+  "main":"gameServer.js"
 }

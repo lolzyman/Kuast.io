@@ -18,8 +18,10 @@ let floorIds = [];
 let mousePosition;
 let xOffset = 0;
 let yOffset = 0;
-let xCenter = 210;
-let yCenter = 210;
+let xCenter = 410;
+let yCenter = 410;
+let xClear = 820;
+let yClear = 820;
 let characterOrientation = 0;
 let singleSample = false;
 const playerSize = 40;
@@ -169,7 +171,7 @@ connection.onmessage = function (message) {
   xOffset = json.player.x + playerSize / 2;
   yOffset = json.player.y + playerSize / 2;
   ctx.fillStyle = "black";
-  ctx.fillRect(0,0,420,420);
+  ctx.fillRect(0,0,xClear,yClear);
   //#region Draw Floors
   json.floors.forEach(element=>{
     ctx.beginPath();
@@ -225,11 +227,15 @@ connection.onmessage = function (message) {
   json.projectiles.forEach(element=>{
     drawProjectile(element);
   });
+  
+  json.lines.forEach(element=>{
+    drawLine(element);
+  });
   //#endregion
   //#region Draw Walls
-    var wallDrawArray = []
-    json.walls.sort(furthestWallSorter);
-    selectSeenWalls(json.walls, wallDrawArray);
+    var wallDrawArray = json.walls;
+    //json.walls.sort(furthestWallSorter);
+    //selectSeenWalls(json.walls, wallDrawArray);
     wallDrawArray.forEach(element =>{
       if(calculateDistance({x:element.x - xOffset + xCenter, y:element.y-yOffset + yCenter}, {x:xCenter, y:yCenter}) < Math.SQRT2 * 250){
         drawBlackOut(element);
@@ -289,7 +295,6 @@ connection.onmessage = function (message) {
 function drawProjectile(projectile){
   var projectileLocation = covertWorldPointToScreenPoint(projectile);
   var projectileCenter = {x:projectileLocation.x + projectile.size.x/2,y:projectileLocation.y + projectile.size.y/2};
-  //console.log("Im drawing stones", projectileCenter, projectile.size);
   ctx.beginPath();
   console.log(projectile.size.x/2);
   ctx.arc(projectileCenter.x ,projectileCenter.y, projectile.size.x/2,0, Math.PI * 2);
@@ -329,7 +334,6 @@ function lineSegmentsIntersection(lineSegment1, lineSegment2){
     return true;
   }
 }
-//returns the furthest wall first
 function furthestWallSorter(a,b){
   return wallPriority(b) - wallPriority(a);
 }
@@ -364,6 +368,24 @@ function covertWorldPointsToScreenPoints(pointsArray){
     convertedPointsArray.push(covertWorldPointToScreenPoint(pointsArray[index]));
   }
   return convertedPointsArray;
+}
+function drawLine(lineObject, lineStyle = 1){
+  var point1 = lineObject.point1;
+  var point2 = lineObject.point2;
+  ctx.moveTo(point1.x - xOffset + xCenter, point1.y - yOffset + yCenter);
+  ctx.lineTo(point2.x - xOffset + xCenter, point2.y - yOffset + yCenter);
+  switch(lineObject.lineStyle){
+    case 1:
+      ctx.strokeStyle = "red";
+      break;
+    case 2:
+      ctx.strokeStyle = "green";
+      break;
+    default:
+      ctx.strokeStyle = "red";
+      break;
+  }
+  ctx.stroke();
 }
 //This is a true Collision with collision hit box
 function checkVisionWallCollision(targetWall, arrayOfWall, targetIndex){
@@ -450,6 +472,7 @@ function crossProduct(vector1, vector2){
 setInterval(function() {
   if (connection.readyState !== 1) {
     console.log("Server Isn't Connected");
+    //connection = new WebSocket(targetGameServer);
   }
 }, 3000);  /**
 * Add message to the chat window

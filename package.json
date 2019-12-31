@@ -10,17 +10,3 @@
     }
   ]
 }
-/*
-  "main": "gameServer.js",
-  "scripts": {
-    "start": "parcel gameServer.js --open",
-    "build": "parcel build gameServer.js"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@babel/core": "7.2.0",
-    "parcel-bundler": "^1.6.1"
-  },
-  "keywords": ["quast.io"]
-}
-//*/

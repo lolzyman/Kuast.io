@@ -60,6 +60,7 @@ http.createServer(function (req, res) {
     });
   }).listen(8090);
 
+console.log("Testing Log Files");
 //Tells the server to start listening on the specified port
 server.listen(webSocketsServerPort);/**
  * WebSocket server

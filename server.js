@@ -7,6 +7,8 @@ var webSocketServer = require('websocket').server;
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
+var { Server } = require('ws');
+
 var crypto = require('crypto');
 let gameEngine = new GameEngine();
 
@@ -54,7 +56,6 @@ var server = http.createServer(function (req, res) {
     if(fileName === ".//"){
       fileName = ".//game.html";
     }
-    console.log(server);
     if(fileName === ".//portFinder.js"){
       res.writeHead(200, {'Content-Type': 'application/javascript'});
       if(process.env.PORT === undefined){
@@ -93,7 +94,7 @@ console.log(process.env.PORT);
  */
 // WebSocket server is tied to a HTTP server. WebSocket request is just an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
 //*
-var wsServer = new webSocketServer({httpServer: server});
+var wsServer = new Server({server});
 // This callback function is called every time someone tries to connect to the WebSocket server
 wsServer.on('request', function(request) {
   // accept connection - you should check 'request.origin' to make sure that client is connecting from your website (http://en.wikipedia.org/wiki/Same_origin_policy)

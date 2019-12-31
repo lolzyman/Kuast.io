@@ -16,6 +16,6 @@
   "dependencies": {
     "websocket": "1.0.31",
     "url": "0.11.0",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
   }
 }

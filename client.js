@@ -149,7 +149,7 @@ var connection;
 // open connection
 if(gameServerPort != undefined){
   console.log(gameServerPort);
-  connection = new WebSocket(gameServerPort, "optionalProtocol");
+  connection = new WebSocket(gameServerPort);
   console.log("connection Properly Defined");
   //new WebSocket("ws://destination.server.ext", "optionalProtocol");
 }

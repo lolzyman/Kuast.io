@@ -4,7 +4,7 @@ const GameEngine = require("./src/gameEngine.js");
 process.title = 'node-chat';// Port where we'll run the websocket server
 var webSocketsServerPort = 1337;// websocket and http servers
 var webSocketServer = require('websocket').server;
-var http = require('https');
+var http = require('http');
 var url = require('url');
 var fs = require('fs');
 var crypto = require('crypto');
@@ -91,7 +91,7 @@ server.listen(webSocketsServerPort);/**
  * WebSocket server
  */
 // WebSocket server is tied to a HTTP server. WebSocket request is just an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
-var wsServer = new webSocketServer({httpServer: server});
+var wsServer = new webSocketServer({httpsServer: server});
 // This callback function is called every time someone tries to connect to the WebSocket server
 wsServer.on('request', function(request) {
   // accept connection - you should check 'request.origin' to make sure that client is connecting from your website (http://en.wikipedia.org/wiki/Same_origin_policy)

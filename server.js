@@ -38,7 +38,7 @@ var server = http.createServer(function(request, response) {
   // not HTTP server
 });
 */
-var server = http.createServer(options, function (req, res) {
+var server = http.createServer(function (req, res) {
     // Gets the information that the user is requesting. Useful for handling what to send to the user
     console.log(url.origin);
     var q = url.parse(req.url, true);

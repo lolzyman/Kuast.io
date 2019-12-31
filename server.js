@@ -121,7 +121,7 @@ wsServer.onopen = function(){
   connection.send(JSON.stringify(gameEngine.getClientInfo(assignedCharacterIndex)));
 }
 //*/
-setInterval(serverLoop, 50);
+setInterval(serverLoop, 20);
 function serverLoop(){
   var start = Date.now();
   gameEngine.gameLoop();

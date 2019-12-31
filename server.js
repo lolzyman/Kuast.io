@@ -43,6 +43,9 @@ http.createServer(function (req, res) {
     if(fileName === ".//reset"){
       resetServer();
     }
+    if(fileName === ".//"){
+      fileName === ".//game.html";
+    }
     fs.readFile(fileName, function(err, data) {
         
       if (err) {

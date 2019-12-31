@@ -54,13 +54,13 @@ var server = http.createServer(function (req, res) {
     if(fileName === ".//"){
       fileName = ".//game.html";
     }
-    console.log("Step 1");
+    console.log(server);
     if(fileName === ".//portFinder.js"){
       res.writeHead(200, {'Content-Type': 'application/javascript'});
       if(process.env.PORT === undefined){
-        res.write("var gameServerPort = 'wss://localhost:5000'");
+        res.write("var gameServerPort = 'ws://localhost:5000'");
       }else{
-        res.write("var gameServerPort = 'wss://quast.herokuapp.com:" + process.env.PORT + "';");
+        res.write("var gameServerPort = 'ws://quast.herokuapp.com:" + process.env.PORT + "';");
         res.write("console.log(gameServerPort)");
         console.log("Step 1.5");
       }
@@ -82,14 +82,7 @@ var server = http.createServer(function (req, res) {
       res.write(data);
       return res.end();
     });
-  }).listen(process.env.PORT || 5000, function () {
-    var host = server.address().address;
-    var port = server.address().port;
-    console.log('running at http://' + host + ':' + port);
-    host = server.address().address;
-    port = server.address().port;
-    console.log('running at http://' + host + ':' + port);
-  });
+  }).listen(process.env.PORT || 5000);
 
 console.log("Testing Log Files");
 console.log(process.env.PORT);
@@ -99,6 +92,7 @@ console.log(process.env.PORT);
  * WebSocket server
  */
 // WebSocket server is tied to a HTTP server. WebSocket request is just an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
+//*
 var wsServer = new webSocketServer({httpServer: server});
 // This callback function is called every time someone tries to connect to the WebSocket server
 wsServer.on('request', function(request) {
@@ -121,7 +115,7 @@ wsServer.on('request', function(request) {
     clients.splice(index, 1);
   });
 });
-
+//*/
 setInterval(serverLoop, 10);
 
 function serverLoop(){

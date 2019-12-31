@@ -51,7 +51,7 @@ var server = http.createServer(function (req, res) {
       if(process.env.PORT === undefined){
         res.write("var gameServerPort = 'ws://localhost:5000'");
       }else{
-        res.write("var gameServerPort = 'https://quast.herokuapp.com" + process.env.PORT + "';");
+        res.write("var gameServerPort = 'https://quast.herokuapp.com:" + process.env.PORT + "';");
       }
       return res.end();
     }

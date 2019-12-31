@@ -9,5 +9,5 @@
       "program": "${workspaceFolder}\\bin\\www"
     }
   ],
-  "main":"gameServer.js"
+  "main":"server.js"
 }
